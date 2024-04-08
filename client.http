@@ -1,0 +1,30 @@
+@baseURL = http://localhost:3333
+
+### Create Bucket
+POST {{baseURL}}/buckets
+Content-Type: application/json
+
+{
+  "status": "FREE",
+  "number": 9
+}
+
+### Edit Bucket
+PUT {{baseURL}}/buckets/6
+Content-Type: application/json
+
+{
+  "number": 2
+}
+
+### List Buckets
+GET {{baseURL}}/buckets
+Content-Type: application/json
+
+### Get a Bucket
+GET {{baseURL}}/buckets/6
+Content-Type: application/json
+
+### Remove a Bucket
+DELETE  {{baseURL}}/buckets/6
+Content-Type: application/json
