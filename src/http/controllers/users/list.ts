@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { prisma } from '../../lib/prisma'
+import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
 
 export async function list(request: FastifyRequest, reply: FastifyReply) {
@@ -9,15 +9,15 @@ export async function list(request: FastifyRequest, reply: FastifyReply) {
 
   const { page } = listQuerySchema.parse(request.params)
 
-  const bucket = await prisma.bucekt.findMany({
+  const user = await prisma.user.findMany({
     orderBy: {
-      number: 'desc',
+      name: 'asc',
     },
     take: 20,
     skip: (page - 1) * 20,
   })
 
   return reply.status(200).send({
-    bucket,
+    user,
   })
 }

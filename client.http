@@ -1,30 +1,68 @@
 @baseURL = http://localhost:3333
+@userId = {{create_user.response.body.user_id}}
+@taskId = {{create_task.response.body.task.id}}
 
-### Create Bucket
-POST {{baseURL}}/buckets
+# @name create_user
+POST {{baseURL}}/users
 Content-Type: application/json
 
 {
-  "status": "FREE",
-  "number": 9
+  "name": "Eduardo Rodrigues",
+  "cnpj": "1234567",
+  "phone": "teste"
 }
 
-### Edit Bucket
-PUT {{baseURL}}/buckets/6
+###
+
+# @name update_user
+PUT {{baseURL}}/users/8b47452f-fe12-4f0c-b263-ea56abc2372c
 Content-Type: application/json
 
 {
-  "number": 2
+  "name": "Eduardo Henrique Rodrigues",
+  "companyName": "Rodrigues Caçamba"
 }
 
-### List Buckets
-GET {{baseURL}}/buckets
+### List Users
+GET {{baseURL}}/users
 Content-Type: application/json
 
-### Get a Bucket
-GET {{baseURL}}/buckets/6
+### Get a User
+GET {{baseURL}}/users/{{userId}}
 Content-Type: application/json
 
-### Remove a Bucket
-DELETE  {{baseURL}}/buckets/6
+### Remove a User
+DELETE  {{baseURL}}/users/{{userId}}
 Content-Type: application/json
+
+
+### TASKS
+# @name create_task
+POST {{baseURL}}/tasks
+Content-Type: application/json
+
+{
+  "buckets": 1,
+  "userId": "29dd22b2-e2b1-46b7-8f6a-ea46eb2acfc3"
+}
+
+###
+# @name edit_tasks
+PUT {{baseURL}}/tasks/1
+Content-Type: application/json
+
+{
+  "status": "CLOSED"
+}
+
+###
+# @name list_tasks
+GET {{baseURL}}/tasks/list/29dd22b2-e2b1-46b7-8f6a-ea46eb2acfc3?page=1
+
+###
+# @name get_task
+GET {{baseURL}}/tasks/{{taskId}}
+
+###
+# @name delete_task
+DELETE {{baseURL}}/tasks/{{taskId}}

@@ -7,11 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Bucekt {
-  id        Int      @id @default(autoincrement())
+model Task {
+  id        String   @id @default(cuid())
   status    String
-  number    Int
+  buckets   Int
   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("buckets")
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @map("user_id")
+
+  @@map("tasks")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  name        String
+  companyName String?  @map("company_name")
+  cnpj        String   @unique
+  phone       String
+  role        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  task Task[]
+
+  @@map("users")
 }
