@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify'
+
 import { create } from './create'
 import { edit } from './edit'
 import { get } from './get'

@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
+
+import { prisma } from '../../../lib/prisma'
 
 export async function list(request: FastifyRequest, reply: FastifyReply) {
   const listQuerySchema = z.object({

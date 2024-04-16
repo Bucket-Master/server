@@ -1,42 +1,45 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import { prisma } from '../../../lib/prisma'
-import { AppError } from '@/http/errors/AppError'
+
+import { makeRegisterUserUseCase } from '@/use-cases/factories/make-register-user-use-case'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createBodySchema = z.object({
     name: z.string().min(3),
+    email: z.string().email(),
+    password: z.string().min(6),
     companyName: z.string().min(3).optional(),
     cnpj: z.string(),
     phone: z.string(),
     role: z.enum(['ADMIN', 'USER']).optional().default('USER'),
   })
 
-  const { name, companyName, cnpj, phone, role } = createBodySchema.parse(
-    request.body,
-  )
+  const { name, email, password, companyName, cnpj, phone, role } =
+    createBodySchema.parse(request.body)
 
-  const userWithSameCnpj = await prisma.user.findUnique({
-    where: {
-      cnpj,
-    },
-  })
+  try {
+    const registerUserUseCase = makeRegisterUserUseCase()
 
-  if (userWithSameCnpj) {
-    AppError('Cnpj already exists.', 409, reply)
-  }
-
-  const user = await prisma.user.create({
-    data: {
+    const { user } = await registerUserUseCase.execute({
       name,
+      email,
+      password,
       companyName,
       cnpj,
       phone,
       role,
-    },
-  })
+    })
 
-  return reply.status(201).send({
-    user_id: user.id,
-  })
+    return reply.status(201).send({
+      user_id: user.id,
+    })
+  } catch (error) {
+    if (error instanceof Error) {
+      return reply.status(400).send({
+        message: 'Bad Request.',
+      })
+    }
+
+    return reply.status(400).send()
+  }
 }

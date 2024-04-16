@@ -8,8 +8,21 @@ Content-Type: application/json
 
 {
   "name": "Eduardo Rodrigues",
+  "email": "eduardo@example.com",
+  "password": "123456",
   "cnpj": "1234567",
   "phone": "teste"
+}
+
+###
+
+# @name authenticate
+POST {{baseURL}}/sessions
+Content-Type: application/json
+
+{
+  "email": "eduardo@example.com",
+  "password": "123456"
 }
 
 ###

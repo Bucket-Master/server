@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "tasks" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "status" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'OPEN',
     "buckets" INTEGER NOT NULL,
     "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" DATETIME NOT NULL,
@@ -13,6 +13,8 @@ CREATE TABLE "tasks" (
 CREATE TABLE "users" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "company_name" TEXT,
     "cnpj" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
@@ -20,6 +22,9 @@ CREATE TABLE "users" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_cnpj_key" ON "users"("cnpj");

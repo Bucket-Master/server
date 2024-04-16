@@ -26,13 +26,13 @@ Para testar as rotas, pode usar o arquivo ```client.http``` com a extensão do [
 - [ ] O administrador pode visualizar usuarios cadastrados
 - [ ] O administrador pode ver usuario que pagou mensalidade da plataforma
 
-- [ ] O usuario deve poder se cadastrar no site
+- [X] O usuario deve poder se cadastrar no site
 - [ ] O usuario deve poder editar dados cadastrados
 - [ ] O usuario deve poder cadastrar novos clientes
 - [ ] O usuario deve poder editar informacoes de clientes, como endereco, nome, telefone de contato
-- [X] O usuario deve poder adicionar nova tarefa
-- [X] O usuario deve poder editar tarefa
-- [X] O usuario deve poder concluir tarefas
+- [ ] O usuario deve poder adicionar nova tarefa
+- [ ] O usuario deve poder editar tarefa
+- [ ] O usuario deve poder concluir tarefas
 - [ ] O usuario deve poder inserir informacoes financeira
 - [ ] O usuario deve poder editar informacoes financeira
 - [ ] O usuario deve poder apagar informacoes financeira
@@ -46,7 +46,7 @@ Para testar as rotas, pode usar o arquivo ```client.http``` com a extensão do [
 - [ ] O acesso a plataforma deve ser mediante a pagamento da mensalidade, somente em real e pelo cartao de credito
 
 ## Requisitos nao-funcionais
-- [ ] A senha do usuario precisa estar criptografada
+- [X] A senha do usuario precisa estar criptografada
 - [ ] Os dados da aplicacao precisam estar persistidos em banco PostgresSQL
 - [ ] Todas as lista de dados precisam estar paginadas
-- [ ] O usuario deve ser identificado por um JWT (Json Web Token)
+- [X] O usuario deve ser identificado por um JWT (Json Web Token)

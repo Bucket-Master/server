@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
+import { z } from 'zod'
+
 import { AppError } from '@/http/errors/AppError'
 import { prisma } from '@/lib/prisma'
-import { z } from 'zod'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createBodySchema = z.object({
