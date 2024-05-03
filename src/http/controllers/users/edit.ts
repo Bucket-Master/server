@@ -1,14 +1,15 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { prisma } from '../../../lib/prisma'
-import { AppError } from '../../errors/AppError'
+import { makeEditUserUseCase } from '@/use-cases/factories/make-edit-user-use-case'
 
 export async function edit(request: FastifyRequest, reply: FastifyReply) {
   const editBodySchema = z.object({
-    name: z.string().min(3).optional(),
-    companyName: z.string().min(3).optional(),
-    phone: z.string().optional(),
+    data: z.object({
+      name: z.string().min(3).optional(),
+      companyName: z.string().min(3).optional(),
+      phone: z.string().optional(),
+    }),
   })
 
   const editParamsSchema = z.object({
@@ -16,28 +17,24 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
   })
 
   const { userId } = editParamsSchema.parse(request.params)
-  const { name, companyName, phone } = editBodySchema.parse(request.body)
+  const { data } = editBodySchema.parse(request.body)
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  })
+  try {
+    const editUserUseCase = makeEditUserUseCase()
 
-  if (!user) {
-    AppError('User not found.', 404, reply)
+    await editUserUseCase.execute({
+      userId,
+      data,
+    })
+
+    return reply.status(200).send()
+  } catch (error) {
+    if (error instanceof Error) {
+      return reply.status(404).send({ message: 'Bad Request.' })
+    }
+
+    return reply.status(400).send({
+      message: error,
+    })
   }
-
-  await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      name,
-      companyName,
-      phone,
-    },
-  })
-
-  return reply.status(200).send()
 }

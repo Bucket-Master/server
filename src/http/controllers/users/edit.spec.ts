@@ -14,7 +14,7 @@ describe('Edit a User (e2e)', () => {
 
   test('[PUT] /users', async () => {
     const user = await request(app.server).post('/users').send({
-      name: 'John Doe',
+      name: 'Jogn Doe',
       email: 'johndoe@example.com',
       password: '123456',
       companyName: 'Company test',
@@ -24,16 +24,21 @@ describe('Edit a User (e2e)', () => {
 
     const userId = user.body.user_id
 
-    const response = await request(app.server).put(`/users/${userId}`).send({
-      name: 'John Wick',
-      companyName: 'John Company',
-    })
+    const response = await request(app.server)
+      .put(`/users/${userId}`)
+      .send({
+        data: {
+          name: 'John Doe',
+          companyName: 'John Company',
+          phone: '(34) 9 9824-9953',
+        },
+      })
 
     expect(response.statusCode).toEqual(200)
 
     const userEditedOnDatabase = await prisma.user.findFirst({
       where: {
-        name: 'John Wick',
+        name: 'John Doe',
         companyName: 'John Company',
       },
     })
