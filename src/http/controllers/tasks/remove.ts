@@ -21,6 +21,10 @@ export async function remove(request: FastifyRequest, reply: FastifyReply) {
     AppError('Task not found.', 404, reply)
   }
 
+  if (task?.status !== 'CLOSED') {
+    AppError('Task not closed.', 404, reply)
+  }
+
   await prisma.task.delete({
     where: {
       id: taskId,

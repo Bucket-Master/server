@@ -10,7 +10,7 @@ export async function list(request: FastifyRequest, reply: FastifyReply) {
 
   const { page } = listQuerySchema.parse(request.params)
 
-  const user = await prisma.user.findMany({
+  const users = await prisma.user.findMany({
     orderBy: {
       name: 'asc',
     },
@@ -19,6 +19,6 @@ export async function list(request: FastifyRequest, reply: FastifyReply) {
   })
 
   return reply.status(200).send({
-    user,
+    users,
   })
 }
