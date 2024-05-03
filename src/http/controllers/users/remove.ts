@@ -1,8 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { prisma } from '../../../lib/prisma'
-import { AppError } from '../../errors/AppError'
+import { makeDeleteUserUseCase } from '@/use-cases/factories/make-delete-user-use-case'
 
 export async function remove(request: FastifyRequest, reply: FastifyReply) {
   const editParamsSchema = z.object({
@@ -11,21 +10,21 @@ export async function remove(request: FastifyRequest, reply: FastifyReply) {
 
   const { userId } = editParamsSchema.parse(request.params)
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  })
+  try {
+    const deleteUserUseCase = makeDeleteUserUseCase()
 
-  if (!user) {
-    AppError('User not found.', 404, reply)
+    deleteUserUseCase.execute({
+      userId,
+    })
+
+    return reply.status(200).send()
+  } catch (error) {
+    if (error instanceof Error) {
+      reply.status(400).send({
+        message: 'Bad Request.',
+      })
+    }
+
+    return reply.status(500).send()
   }
-
-  await prisma.user.delete({
-    where: {
-      id: userId,
-    },
-  })
-
-  return reply.status(200).send()
 }

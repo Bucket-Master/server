@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
+import { undefined, z } from 'zod'
 
 import { makeGetUserUseCase } from '@/use-cases/factories/make-get-user-use-case'
 
@@ -16,7 +16,10 @@ export async function get(request: FastifyRequest, reply: FastifyReply) {
     const { user } = await getUserUseCase.execute({ userId })
 
     return reply.status(200).send({
-      user,
+      user: {
+        ...user,
+        password: undefined,
+      },
     })
   } catch (error) {
     if (error instanceof Error) {

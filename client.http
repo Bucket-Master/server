@@ -8,9 +8,9 @@ Content-Type: application/json
 
 {
   "name": "Eduardo Rodrigues",
-  "email": "eduardo@example.com",
+  "email": "eduardo2@example.com",
   "password": "123456",
-  "cnpj": "1234567",
+  "cnpj": "123456781",
   "phone": "teste"
 }
 

@@ -38,6 +38,14 @@ export class PrismaUsersRepository implements UsersRepository {
     const totalItems = await prisma.user.count()
 
     const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        companyName: true,
+        createdAt: true,
+        role: true,
+      },
       orderBy: {
         name: 'asc',
       },
@@ -70,5 +78,13 @@ export class PrismaUsersRepository implements UsersRepository {
     })
 
     return user
+  }
+
+  async delete(userId: string): Promise<void> {
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    })
   }
 }
