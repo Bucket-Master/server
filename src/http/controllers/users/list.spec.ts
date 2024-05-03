@@ -33,6 +33,6 @@ describe('List Users (e2e)', () => {
     const response = await request(app.server).get(`/users`)
 
     expect(response.statusCode).toEqual(200)
-    expect(response.body.users).toHaveLength(2)
+    expect(response.body.pagination.items).toHaveLength(2)
   })
 })

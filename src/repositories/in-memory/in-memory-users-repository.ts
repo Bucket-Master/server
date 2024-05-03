@@ -2,6 +2,8 @@ import { randomUUID } from 'node:crypto'
 
 import { Prisma, User } from '@prisma/client'
 
+import { Pagination } from '@/@types/pagination'
+
 import { UsersRepository } from '../users-repository'
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -44,6 +46,21 @@ export class InMemoryUsersRepository implements UsersRepository {
     }
 
     return user
+  }
+
+  async fetch(page: number): Promise<Pagination> {
+    const users = this.items.slice((page - 1) * 20, page * 20)
+    const totalItems = users.length
+    const totalPages = Math.ceil(totalItems / 20)
+    const itemsPerPage = page === totalPages ? totalPages % 20 : 20
+
+    return {
+      currentPage: page,
+      totalItems,
+      totalPages,
+      itemsPerPage,
+      items: users,
+    }
   }
 
   async edit(

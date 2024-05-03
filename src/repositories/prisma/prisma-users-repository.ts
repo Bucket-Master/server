@@ -1,5 +1,6 @@
 import { Prisma, User } from '@prisma/client'
 
+import { Pagination } from '@/@types/pagination'
 import { prisma } from '@/lib/prisma'
 
 import { UsersRepository } from '../users-repository'
@@ -31,6 +32,30 @@ export class PrismaUsersRepository implements UsersRepository {
     })
 
     return user
+  }
+
+  async fetch(page: number): Promise<Pagination> {
+    const totalItems = await prisma.user.count()
+
+    const users = await prisma.user.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+      take: 20,
+      skip: (page - 1) * 20,
+    })
+
+    const totalPages = Math.ceil(totalItems / 20)
+
+    const itemsPerPage = page === totalPages ? totalItems % 20 : 20
+
+    return {
+      currentPage: page,
+      totalItems,
+      totalPages,
+      itemsPerPage,
+      items: users,
+    }
   }
 
   async edit(

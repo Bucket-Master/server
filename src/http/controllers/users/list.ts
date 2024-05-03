@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { prisma } from '../../../lib/prisma'
+import { makeFetchUsersUseCase } from '@/use-cases/factories/make-fetch-users-use-case'
 
 export async function list(request: FastifyRequest, reply: FastifyReply) {
   const listQuerySchema = z.object({
@@ -10,15 +10,16 @@ export async function list(request: FastifyRequest, reply: FastifyReply) {
 
   const { page } = listQuerySchema.parse(request.params)
 
-  const users = await prisma.user.findMany({
-    orderBy: {
-      name: 'asc',
-    },
-    take: 20,
-    skip: (page - 1) * 20,
-  })
+  try {
+    const fetchUsersUseCase = makeFetchUsersUseCase()
+    const { pagination } = await fetchUsersUseCase.execute({
+      page,
+    })
 
-  return reply.status(200).send({
-    users,
-  })
+    return {
+      pagination,
+    }
+  } catch (error) {
+    return reply.status(500).send()
+  }
 }
