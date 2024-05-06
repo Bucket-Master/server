@@ -2,6 +2,8 @@ import { Prisma, Task } from '@prisma/client'
 
 import { TasksRepository } from '@/repositories/tasks-repository'
 
+import { ResourceNotFoundError } from './errors/resource-not-found'
+
 interface EditTaskUseCaseRequest {
   taskId: string
   data: Prisma.TaskUncheckedUpdateInput
@@ -21,7 +23,7 @@ export class EditTaskUseCase {
     const task = await this.tasksRepository.findById(taskId)
 
     if (!task) {
-      throw new Error()
+      throw new ResourceNotFoundError()
     }
 
     const updatedTask = await this.tasksRepository.edit(taskId, data)

@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
+import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found'
 import { makeCreateTaskUseCase } from '@/use-cases/factories/make-create-task-use-case'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
@@ -23,9 +24,9 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
       task,
     })
   } catch (error) {
-    if (error instanceof Error) {
-      return reply.status(400).send({
-        message: 'Bad request.',
+    if (error instanceof ResourceNotFoundError) {
+      return reply.status(404).send({
+        message: error.message,
       })
     }
 

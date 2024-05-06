@@ -5,6 +5,7 @@ import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-user
 import { UsersRepository } from '@/repositories/users-repository'
 
 import { AuthenticateUseCase } from './authenticate-use-case'
+import { InvalidCredentialsError } from './errors/invalid-credentials'
 
 let usersRepository: UsersRepository
 let sut: AuthenticateUseCase
@@ -48,13 +49,13 @@ describe('Authenticate Use Case', () => {
         email: 'wrong-email@example.com',
         password: '123456',
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(InvalidCredentialsError)
 
     await expect(() =>
       sut.execute({
         email: 'johndoe@example.com',
         password: 'wrong-password',
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
 })

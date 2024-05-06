@@ -21,7 +21,7 @@ describe('Fetch Tasks Use Case', () => {
       email: 'johndoe@example.com',
       password: 'password',
       cnpj: 'cnpj-example',
-      role: 'MEMBER',
+      role: 'USER',
       phone: 'phone-example',
     })
   })

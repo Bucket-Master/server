@@ -2,6 +2,8 @@ import { Prisma, User } from '@prisma/client'
 
 import { UsersRepository } from '@/repositories/users-repository'
 
+import { ResourceNotFoundError } from './errors/resource-not-found'
+
 interface EditUserUseCaseRequest {
   userId: string
   data: Prisma.UserUncheckedUpdateInput
@@ -21,7 +23,7 @@ export class EditUserUseCase {
     const user = await this.usersRepository.findById(userId)
 
     if (!user) {
-      throw new Error()
+      throw new ResourceNotFoundError()
     }
 
     const updatedUser = await this.usersRepository.edit(userId, data)

@@ -6,6 +6,7 @@ import { TasksRepository } from '@/repositories/tasks-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 
 import { CreateTaskUseCase } from './create-task-use-case'
+import { ResourceNotFoundError } from './errors/resource-not-found'
 
 let taksRepository: TasksRepository
 let usersRepository: UsersRepository
@@ -45,6 +46,6 @@ describe('Create Task Use Case', () => {
           userId: 'user-not-exists',
           buckets: 1,
         }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

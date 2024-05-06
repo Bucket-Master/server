@@ -4,6 +4,7 @@ import { InMemoryTasksRepository } from '@/repositories/in-memory/in-memory-task
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 
 import { EditTaskUseCase } from './edit-task-use-case'
+import { ResourceNotFoundError } from './errors/resource-not-found'
 
 let tasksRepository: InMemoryTasksRepository
 let usersRepository: InMemoryUsersRepository
@@ -55,6 +56,6 @@ describe('Edit Task Use Case', async () => {
           buckets: 1,
         },
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

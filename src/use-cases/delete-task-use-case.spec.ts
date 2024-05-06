@@ -4,6 +4,7 @@ import { InMemoryTasksRepository } from '@/repositories/in-memory/in-memory-task
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 
 import { DeleteTaskUseCase } from './delete-task-use-case'
+import { ResourceNotFoundError } from './errors/resource-not-found'
 
 let tasksRepository: InMemoryTasksRepository
 let usersRepository: InMemoryUsersRepository
@@ -50,6 +51,6 @@ describe('Delete Task Use Case', async () => {
       sut.execute({
         taskId: 'wrong-id',
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

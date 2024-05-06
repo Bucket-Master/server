@@ -3,6 +3,8 @@ import { Task } from '@prisma/client'
 import { TasksRepository } from '@/repositories/tasks-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 
+import { ResourceNotFoundError } from './errors/resource-not-found'
+
 interface CreateTaskUseCaseRequest {
   userId: string
   buckets: number
@@ -25,7 +27,7 @@ export class CreateTaskUseCase {
     const user = await this.usersRepository.findById(userId)
 
     if (!user) {
-      throw new Error()
+      throw new ResourceNotFoundError()
     }
 
     const task = await this.tasksRepository.create({

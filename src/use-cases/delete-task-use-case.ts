@@ -1,5 +1,8 @@
 import { TasksRepository } from '@/repositories/tasks-repository'
 
+import { ResourceNotFoundError } from './errors/resource-not-found'
+import { TaskIsNotClosedError } from './errors/task-is-not-closed'
+
 interface DeleteTaskUseCaseRequest {
   taskId: string
 }
@@ -11,11 +14,11 @@ export class DeleteTaskUseCase {
     const task = await this.tasksRepository.findById(taskId)
 
     if (!task) {
-      throw new Error()
+      throw new ResourceNotFoundError()
     }
 
     if (task.status !== 'CLOSED') {
-      throw new Error()
+      throw new TaskIsNotClosedError()
     }
 
     await this.tasksRepository.delete(taskId)

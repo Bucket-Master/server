@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
+import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found'
 import { makeEditUserUseCase } from '@/use-cases/factories/make-edit-user-use-case'
 
 export async function edit(request: FastifyRequest, reply: FastifyReply) {
@@ -29,8 +30,8 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
 
     return reply.status(200).send()
   } catch (error) {
-    if (error instanceof Error) {
-      return reply.status(404).send({ message: 'Bad Request.' })
+    if (error instanceof ResourceNotFoundError) {
+      return reply.status(404).send({ message: error.message })
     }
 
     return reply.status(400).send({

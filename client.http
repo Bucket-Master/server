@@ -8,9 +8,9 @@ Content-Type: application/json
 
 {
   "name": "Eduardo Rodrigues",
-  "email": "eduardo@example.com",
+  "email": "eduardo1@example.com",
   "password": "123456",
-  "cnpj": "123456781",
+  "cnpj": "12345678",
   "phone": "teste"
 }
 
@@ -21,19 +21,21 @@ POST {{baseURL}}/sessions
 Content-Type: application/json
 
 {
-  "email": "eduardo@example.com",
+  "email": "eduardo1@example.com",
   "password": "123456"
 }
 
 ###
 
 # @name update_user
-PUT {{baseURL}}/users/8b47452f-fe12-4f0c-b263-ea56abc2372c
+PUT {{baseURL}}/users/f48afc3e-672a-4915-8a40-6379e145e6be
 Content-Type: application/json
 
 {
-  "name": "Eduardo Henrique Rodrigues",
-  "companyName": "Rodrigues Caçamba"
+  "data": {
+    "name": "Eduardo Henrique Rodrigues",
+    "companyName": "Rodrigues Caçamba"
+  }
 }
 
 ### List Users

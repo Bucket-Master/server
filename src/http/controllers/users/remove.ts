@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
+import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found'
 import { makeDeleteUserUseCase } from '@/use-cases/factories/make-delete-user-use-case'
 
 export async function remove(request: FastifyRequest, reply: FastifyReply) {
@@ -19,9 +20,9 @@ export async function remove(request: FastifyRequest, reply: FastifyReply) {
 
     return reply.status(200).send()
   } catch (error) {
-    if (error instanceof Error) {
-      reply.status(400).send({
-        message: 'Bad Request.',
+    if (error instanceof ResourceNotFoundError) {
+      reply.status(404).send({
+        message: error.message,
       })
     }
 

@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { undefined, z } from 'zod'
 
+import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found'
 import { makeGetUserUseCase } from '@/use-cases/factories/make-get-user-use-case'
 
 export async function get(request: FastifyRequest, reply: FastifyReply) {
@@ -22,9 +23,9 @@ export async function get(request: FastifyRequest, reply: FastifyReply) {
       },
     })
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof ResourceNotFoundError) {
       return reply.status(404).send({
-        message: 'Bad Request.',
+        message: error.message,
       })
     }
 

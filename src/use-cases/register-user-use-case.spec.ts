@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { UsersRepository } from '@/repositories/users-repository'
 
+import { UserAlreadyExistsError } from './errors/user-already-exists'
 import { RegisterUserUseCase } from './register-user-use-case'
 
 let userRepository: UsersRepository
@@ -61,6 +62,6 @@ describe('Create User Use Case', () => {
         cnpj: '12345678910',
         phone: '(34) 9 9999-9999',
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(UserAlreadyExistsError)
   })
 })

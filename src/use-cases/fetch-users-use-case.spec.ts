@@ -20,7 +20,7 @@ describe('Fetch Users Use Case', () => {
         email: `user${i}@example.com`,
         password: 'password',
         cnpj: `cnpj ${i}`,
-        role: 'MEMBER',
+        role: 'USER',
         phone: `phone ${i}`,
       })
     }

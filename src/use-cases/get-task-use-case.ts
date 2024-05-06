@@ -2,6 +2,8 @@ import { Task } from '@prisma/client'
 
 import { TasksRepository } from '@/repositories/tasks-repository'
 
+import { ResourceNotFoundError } from './errors/resource-not-found'
+
 interface GetTaskUseCaseRequest {
   taskId: string
 }
@@ -19,7 +21,7 @@ export class GetTaskUseCase {
     const task = await this.tasksRepository.findById(taskId)
 
     if (!task) {
-      throw new Error()
+      throw new ResourceNotFoundError()
     }
 
     return {

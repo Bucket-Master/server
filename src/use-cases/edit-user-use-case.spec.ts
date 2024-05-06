@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 
 import { EditUserUseCase } from './edit-user-use-case'
+import { ResourceNotFoundError } from './errors/resource-not-found'
 
 let usersRepository: InMemoryUsersRepository
 let sut: EditUserUseCase
@@ -51,6 +52,6 @@ describe('Edit User Use Case', async () => {
           companyName: 'John Enterprise',
         },
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })
