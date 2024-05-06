@@ -17,7 +17,7 @@ describe('Fetch Users Use Case', () => {
     for (let i = 1; i <= 22; i++) {
       await usersRepository.create({
         name: `User ${i}`,
-        email: `vereador${i}@example.com`,
+        email: `user${i}@example.com`,
         password: 'password',
         cnpj: `cnpj ${i}`,
         role: 'MEMBER',
