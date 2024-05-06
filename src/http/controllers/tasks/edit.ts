@@ -11,7 +11,7 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
   })
 
   const editParamsSchema = z.object({
-    taskId: z.string().cuid(),
+    taskId: z.string().uuid(),
   })
 
   const { taskId } = editParamsSchema.parse(request.params)

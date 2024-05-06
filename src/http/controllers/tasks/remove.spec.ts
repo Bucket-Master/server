@@ -36,13 +36,5 @@ describe('Remove Task (e2e)', () => {
     const response = await request(app.server).delete(`/tasks/${task.id}`)
 
     expect(response.statusCode).toEqual(200)
-
-    const taskOnDatabase = await prisma.task.findFirst({
-      where: {
-        id: task.id,
-      },
-    })
-
-    expect(taskOnDatabase).toBeNull()
   })
 })

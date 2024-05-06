@@ -7,9 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  OPEN
+  CURRENT
+  REPLACE
+  CLOSED
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
 model Task {
-  id        String   @id @default(cuid())
-  status    String   @default("OPEN")
+  id        String   @id @default(uuid())
+  status    Status   @default(OPEN)
   buckets   Int
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -28,7 +40,7 @@ model User {
   companyName String?  @map("company_name")
   cnpj        String   @unique
   phone       String
-  role        String
+  role        Role     @default(USER)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

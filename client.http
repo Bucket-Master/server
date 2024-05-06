@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
   "name": "Eduardo Rodrigues",
-  "email": "eduardo2@example.com",
+  "email": "eduardo@example.com",
   "password": "123456",
   "cnpj": "123456781",
   "phone": "teste"
@@ -56,12 +56,12 @@ Content-Type: application/json
 
 {
   "buckets": 1,
-  "userId": "71ace94c-2e66-4fa8-b295-a61fdb36d535"
+  "userId": "aaba2f65-5e5a-4c38-ae43-b6b94eb5a14d"
 }
 
 ###
 # @name edit_tasks
-PUT {{baseURL}}/tasks/clvq0yw6y0003tlqij81wfumz
+PUT {{baseURL}}/tasks/a40778b4-8783-4755-8d99-5e52775ea3fd
 Content-Type: application/json
 
 {
@@ -70,7 +70,7 @@ Content-Type: application/json
 
 ###
 # @name list_tasks
-GET {{baseURL}}/tasks/list/29dd22b2-e2b1-46b7-8f6a-ea46eb2acfc3?page=1
+GET {{baseURL}}/tasks/list/aaba2f65-5e5a-4c38-ae43-b6b94eb5a14d?page=1
 
 ###
 # @name get_task
@@ -78,4 +78,4 @@ GET {{baseURL}}/tasks/{{taskId}}
 
 ###
 # @name delete_task
-DELETE {{baseURL}}/tasks/{{taskId}}
+DELETE {{baseURL}}/tasks/046bec32-1827-47f2-a1b3-17095d4f1c82
