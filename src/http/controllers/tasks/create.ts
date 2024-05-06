@@ -1,40 +1,34 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { AppError } from '@/http/errors/AppError'
-import { prisma } from '@/lib/prisma'
+import { makeCreateTaskUseCase } from '@/use-cases/factories/make-create-task-use-case'
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createBodySchema = z.object({
-    status: z
-      .enum(['OPEN', 'CURRENT', 'REPLACE', 'CLOSED'])
-      .optional()
-      .default('OPEN'),
     buckets: z.number(),
     userId: z.string().uuid(),
   })
 
-  const { status, buckets, userId } = createBodySchema.parse(request.body)
+  const { buckets, userId } = createBodySchema.parse(request.body)
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-  })
+  try {
+    const createTaskUseCase = makeCreateTaskUseCase()
 
-  if (!user) {
-    AppError('User not found.', 404, reply)
-  }
-
-  const task = await prisma.task.create({
-    data: {
-      status,
+    const { task } = await createTaskUseCase.execute({
       buckets,
       userId,
-    },
-  })
+    })
 
-  return reply.status(201).send({
-    task,
-  })
+    return reply.status(201).send({
+      task,
+    })
+  } catch (error) {
+    if (error instanceof Error) {
+      return reply.status(400).send({
+        message: 'Bad request.',
+      })
+    }
+
+    reply.status(500).send()
+  }
 }

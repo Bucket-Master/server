@@ -1,8 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { prisma } from '../../../lib/prisma'
-import { AppError } from '../../errors/AppError'
+import { makeGetTaskUseCase } from '@/use-cases/factories/make-get-task-use-case'
 
 export async function get(request: FastifyRequest, reply: FastifyReply) {
   const editParamsSchema = z.object({
@@ -11,17 +10,21 @@ export async function get(request: FastifyRequest, reply: FastifyReply) {
 
   const { taskId } = editParamsSchema.parse(request.params)
 
-  const task = await prisma.task.findUnique({
-    where: {
-      id: taskId,
-    },
-  })
+  try {
+    const getTaskUseCase = makeGetTaskUseCase()
 
-  if (!task) {
-    AppError('Task not found.', 404, reply)
+    const { task } = await getTaskUseCase.execute({
+      taskId,
+    })
+
+    return reply.status(200).send({
+      task,
+    })
+  } catch (error) {
+    if (error instanceof Error) {
+      return reply.status(400).send({
+        message: 'Bad Request.',
+      })
+    }
   }
-
-  return reply.status(200).send({
-    task,
-  })
 }
