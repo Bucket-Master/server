@@ -33,10 +33,14 @@ describe('Edit Task (e2e)', () => {
       },
     })
 
-    const response = await request(app.server).put(`/tasks/${task.id}`).send({
-      status: 'REPLACE',
-      buckets: 1,
-    })
+    const response = await request(app.server)
+      .put(`/tasks/${task.id}`)
+      .send({
+        data: {
+          status: 'REPLACE',
+          buckets: 1,
+        },
+      })
 
     expect(response.statusCode).toEqual(200)
 

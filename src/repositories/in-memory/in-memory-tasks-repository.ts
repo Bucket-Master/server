@@ -27,12 +27,8 @@ export class InMemoryTasksRepository implements TasksRepository {
   async edit(
     taskId: string,
     data: Prisma.TaskUncheckedUpdateInput,
-  ): Promise<Task | null> {
+  ): Promise<Task> {
     const index = this.items.findIndex((item) => item.id === taskId)
-
-    if (index <= -1) {
-      return null
-    }
 
     const task = <Task>{ ...this.items[index], ...data }
 

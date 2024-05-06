@@ -64,7 +64,7 @@ export class PrismaTasksRepository implements TasksRepository {
   async edit(
     taskId: string,
     data: Prisma.TaskUncheckedUpdateInput,
-  ): Promise<Task | null> {
+  ): Promise<Task> {
     const task = await prisma.task.update({
       where: {
         id: taskId,

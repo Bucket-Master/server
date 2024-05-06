@@ -18,7 +18,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       name: data.name,
       cnpj: data.cnpj,
       phone: data.phone,
-      role: data.role,
+      role: data.role ?? 'USER',
       createdAt: new Date(),
       updatedAt: new Date(),
     }

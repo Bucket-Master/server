@@ -1,13 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { prisma } from '../../../lib/prisma'
-import { AppError } from '../../errors/AppError'
+import { makeEditTaskUseCase } from '@/use-cases/factories/make-edit-task-use-case'
 
 export async function edit(request: FastifyRequest, reply: FastifyReply) {
   const editBodySchema = z.object({
-    status: z.enum(['CURRENT', 'REPLACE', 'CLOSED']).optional(),
-    buckets: z.number().optional(),
+    data: z.object({
+      status: z.enum(['CURRENT', 'REPLACE', 'CLOSED']).optional(),
+      buckets: z.number().optional(),
+    }),
   })
 
   const editParamsSchema = z.object({
@@ -15,27 +16,22 @@ export async function edit(request: FastifyRequest, reply: FastifyReply) {
   })
 
   const { taskId } = editParamsSchema.parse(request.params)
-  const { status, buckets } = editBodySchema.parse(request.body)
+  const { data } = editBodySchema.parse(request.body)
 
-  const task = await prisma.task.findUnique({
-    where: {
-      id: taskId,
-    },
-  })
+  try {
+    const editTaskUseCase = makeEditTaskUseCase()
 
-  if (!task) {
-    AppError('Task not found.', 404, reply)
+    await editTaskUseCase.execute({
+      taskId,
+      data,
+    })
+
+    return reply.status(200).send()
+  } catch (error) {
+    if (error instanceof Error) {
+      return reply.status(400).send()
+    }
+
+    return reply.status(500).send()
   }
-
-  await prisma.task.update({
-    where: {
-      id: taskId,
-    },
-    data: {
-      status,
-      buckets,
-    },
-  })
-
-  return reply.status(200).send()
 }
