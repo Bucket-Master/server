@@ -1,5 +1,5 @@
 {
-  "name": "app-cacamba",
+  "name": "task-haul-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -39,13 +39,16 @@
     "vitest": "1.5.0"
   },
   "dependencies": {
+    "@fastify/autoload": "5.8.2",
     "@fastify/cookie": "9.3.1",
     "@fastify/jwt": "8.0.0",
     "@fastify/swagger": "8.14.0",
+    "@fastify/swagger-ui": "3.0.0",
     "@prisma/client": "5.12.1",
     "bcryptjs": "2.4.3",
     "dotenv": "16.4.5",
     "fastify": "4.26.2",
+    "fastify-type-provider-zod": "1.1.9",
     "sqlite3": "5.1.7",
     "zod": "3.22.4"
   }

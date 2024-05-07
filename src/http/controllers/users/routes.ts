@@ -7,12 +7,9 @@ import { list } from './list'
 import { remove } from './remove'
 
 export async function UserRoutes(app: FastifyInstance) {
-  app.post('/users', create)
-
-  app.put('/users/:userId', edit)
-
-  app.get('/users', list)
-  app.get('/users/:userId', get)
-
-  app.delete('/users/:userId', remove)
+  app.register(create)
+  app.register(edit)
+  app.register(get)
+  app.register(list)
+  app.register(remove)
 }
