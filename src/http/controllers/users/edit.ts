@@ -16,12 +16,14 @@ export async function edit(app: FastifyInstance) {
           userId: z.string().uuid(),
         }),
         body: z.object({
-          name: z.string().min(3).optional(),
-          email: z.string().email().optional(),
-          password: z.string().min(6).optional(),
-          oldPassword: z.string().min(6).optional(),
-          companyName: z.string().min(3).optional(),
-          phone: z.string().optional(),
+          data: z.object({
+            name: z.string().min(3).optional(),
+            email: z.string().email().optional(),
+            // password: z.string().min(6).optional(),
+            // oldPassword: z.string().min(6).optional(),
+            companyName: z.string().min(3).optional(),
+            // phone: z.string().optional(),
+          }),
         }),
         response: {
           201: z.null(),
@@ -41,7 +43,7 @@ export async function edit(app: FastifyInstance) {
       })
 
       const editParamsSchema = z.object({
-        userId: z.string().uuid(),
+        userId: z.coerce.string().uuid(),
       })
 
       const { userId } = editParamsSchema.parse(request.params)
