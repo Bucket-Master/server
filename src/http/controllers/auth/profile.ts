@@ -7,16 +7,13 @@ import { verifyUserRole } from '@/http/middlewares/verify-user-role'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found'
 import { makeGetUserUseCase } from '@/use-cases/factories/make-get-user-use-case'
 
-export async function get(app: FastifyInstance) {
+export async function profile(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
-    '/users/:userId',
+    '/me',
     {
       schema: {
-        summary: 'Get an user',
-        tags: ['users'],
-        params: z.object({
-          userId: z.string().uuid(),
-        }),
+        summary: 'User profile',
+        tags: ['auth'],
         response: {
           200: z.object({
             user: z.object({
@@ -33,19 +30,15 @@ export async function get(app: FastifyInstance) {
           }),
         },
       },
-      onRequest: [verifyJwt, verifyUserRole(['ADMIN'])],
+      onRequest: [verifyJwt, verifyUserRole(['USER'])],
     },
     async (request, reply) => {
-      const editParamsSchema = z.object({
-        userId: z.string().uuid(),
-      })
-
-      const { userId } = editParamsSchema.parse(request.params)
+      const { sub } = request.user
 
       try {
         const getUserUseCase = makeGetUserUseCase()
 
-        const { user } = await getUserUseCase.execute({ userId })
+        const { user } = await getUserUseCase.execute({ userId: sub })
 
         return reply.status(200).send({
           user,

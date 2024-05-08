@@ -24,7 +24,7 @@ app.register(fastifySwagger, {
     info: {
       title: 'Task Haul',
       description:
-        'Especificação da API para o back-end da aplicação pass.in constuída durante o NLW Unite da Rocketseat.',
+        'Especificação da API para o back-end da aplicação Task Haul.',
       version: '1.0.0',
     },
   },

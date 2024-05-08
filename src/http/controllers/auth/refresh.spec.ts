@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 
 import { app } from '@/app'
 
-describe('Authenticate (e2e)', () => {
+describe('Refresh token (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -11,7 +11,7 @@ describe('Authenticate (e2e)', () => {
     await app.close()
   })
 
-  test('[POST] /sessions', async () => {
+  test('[PATCH] /sessions/refresh', async () => {
     await request(app.server).post('/users').send({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -21,14 +21,24 @@ describe('Authenticate (e2e)', () => {
       phone: 'phone-test',
     })
 
-    const response = await request(app.server).post('/auth/login').send({
+    const authResponse = await request(app.server).post('/auth/login').send({
       email: 'johndoe@example.com',
       password: '123456',
     })
+
+    const cookies = authResponse.get('Set-Cookie')
+
+    const response = await request(app.server)
+      .patch('/auth/refresh')
+      .set('Cookie', cookies!)
+      .send()
 
     expect(response.statusCode).toEqual(200)
     expect(response.body).toEqual({
       token: expect.any(String),
     })
+    expect(response.get('Set-Cookie')).toEqual([
+      expect.stringContaining('refreshToken='),
+    ])
   })
 })

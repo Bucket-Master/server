@@ -7,10 +7,10 @@ import { makeAuthenticateUseCase } from '@/use-cases/factories/make-authenticate
 
 export async function authenticate(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
-    '/sessions',
+    '/auth/login',
     {
       schema: {
-        summary: 'Post a sessions user',
+        summary: 'Authenticate an user',
         tags: ['auth'],
         body: z.object({
           email: z.string().email(),
@@ -42,24 +42,41 @@ export async function authenticate(app: FastifyInstance) {
           password,
         })
 
-        const token = await reply.jwtSign({
-          sign: { sub: user.id, role: user.role },
-        })
+        const token = await reply.jwtSign(
+          {
+            role: user.role,
+          },
+          {
+            sign: {
+              sub: user.id,
+            },
+          },
+        )
 
-        const refreshToken = await reply.jwtSign({
-          sign: { sub: user.id, role: user.role, expireIn: '3d' },
-        })
+        const refreshToken = await reply.jwtSign(
+          {
+            role: user.role,
+          },
+          {
+            sign: {
+              sub: user.id,
+              expiresIn: '3d',
+            },
+          },
+        )
 
         return reply
           .setCookie('refreshToken', refreshToken, {
+            path: '/',
             secure: true,
+            sameSite: true,
             httpOnly: true,
           })
           .status(200)
           .send({ token })
       } catch (error) {
         if (error instanceof InvalidCredentialsError) {
-          return reply.status(400).send({
+          return reply.status(404).send({
             message: error.message,
           })
         }
