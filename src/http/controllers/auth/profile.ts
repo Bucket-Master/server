@@ -3,7 +3,6 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import { z } from 'zod'
 
 import { verifyJwt } from '@/http/middlewares/verify-jwt'
-import { verifyUserRole } from '@/http/middlewares/verify-user-role'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found'
 import { makeGetUserUseCase } from '@/use-cases/factories/make-get-user-use-case'
 
@@ -30,7 +29,7 @@ export async function profile(app: FastifyInstance) {
           }),
         },
       },
-      onRequest: [verifyJwt, verifyUserRole(['USER'])],
+      onRequest: [verifyJwt],
     },
     async (request, reply) => {
       const { sub } = request.user

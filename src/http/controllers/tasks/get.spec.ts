@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 
 import { app } from '@/app'
 import { prisma } from '@/lib/prisma'
+import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
 
 describe('Get Task (e2e)', () => {
   beforeAll(async () => {
@@ -13,17 +14,7 @@ describe('Get Task (e2e)', () => {
   })
 
   test('[GET] /tasks', async () => {
-    const user = await prisma.user.create({
-      data: {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        password: '123456',
-        companyName: 'Company test',
-        cnpj: 'cnpj-test',
-        phone: 'phone-test',
-        role: 'USER',
-      },
-    })
+    const { token, user } = await createAndAuthenticateUser(app)
 
     const task = await prisma.task.create({
       data: {
@@ -33,7 +24,10 @@ describe('Get Task (e2e)', () => {
       },
     })
 
-    const response = await request(app.server).get(`/tasks/${task.id}`).send()
+    const response = await request(app.server)
+      .get(`/tasks/${task.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send()
 
     expect(response.statusCode).toEqual(200)
     expect(response.body).toEqual({

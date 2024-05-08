@@ -7,17 +7,17 @@ import { makeCreateTaskUseCase } from '@/use-cases/factories/make-create-task-us
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createBodySchema = z.object({
     buckets: z.number(),
-    userId: z.string().uuid(),
   })
 
-  const { buckets, userId } = createBodySchema.parse(request.body)
+  const { buckets } = createBodySchema.parse(request.body)
+  const { sub } = request.user
 
   try {
     const createTaskUseCase = makeCreateTaskUseCase()
 
     const { task } = await createTaskUseCase.execute({
       buckets,
-      userId,
+      userId: sub,
     })
 
     return reply.status(201).send({
